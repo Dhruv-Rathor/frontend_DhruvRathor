@@ -1,0 +1,57 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    <style> .card { border:1px solid #ccc; padding:10px; margin:10px; width:200px; } </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        // Task 28: Custom Card Component
+        function Card({ title, desc }) {
+            return (
+                <div className="card">
+                    <h3>{title}</h3>
+                    <p>{desc}</p>
+                </div>
+            );
+        }
+
+        // Task 29: Controlled Form
+        function Form() {
+            const [name, setName] = React.useState("");
+            
+            return (
+                <div>
+                    <input 
+                        type="text" 
+                        value={name} 
+                        onChange={(e) => setName(e.target.value)} 
+                        placeholder="Enter Name"
+                    />
+                    <p>You typed: {name}</p>
+                </div>
+            );
+        }
+
+        function App() {
+            return (
+                <div>
+                    <h2>Products</h2>
+                    <Card title="Laptop" desc="High Performance" />
+                    <Card title="Phone" desc="Latest Model" />
+                    <hr/>
+                    <h2>Contact</h2>
+                    <Form />
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>

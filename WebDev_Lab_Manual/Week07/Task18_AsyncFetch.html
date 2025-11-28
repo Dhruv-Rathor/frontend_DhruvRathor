@@ -1,0 +1,20 @@
+﻿<!DOCTYPE html>
+<html>
+<body>
+    <button onclick="fetchData()">Load Data</button>
+    <div id="output"></div>
+
+    <script>
+        function fetchData() {
+            document.getElementById("output").innerText = "Loading...";
+            
+            // Simulating API call
+            new Promise((resolve) => {
+                setTimeout(() => resolve("Server Data Received!"), 2000);
+            }).then(data => {
+                document.getElementById("output").innerText = data;
+            });
+        }
+    </script>
+</body>
+</html>

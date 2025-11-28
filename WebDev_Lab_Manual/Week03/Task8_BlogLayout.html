@@ -1,0 +1,22 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<style>
+    .blog-container { display: flex; gap: 20px; }
+    .col { flex: 1; background: #eee; padding: 20px; }
+    
+    /* Mobile Responsive */
+    @media (max-width: 600px) {
+        .blog-container { flex-direction: column; }
+    }
+</style>
+</head>
+<body>
+    <h2>Responsive Blog</h2>
+    <div class="blog-container">
+        <div class="col">Column 1</div>
+        <div class="col">Column 2</div>
+        <div class="col">Column 3</div>
+    </div>
+</body>
+</html>

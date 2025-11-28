@@ -1,0 +1,29 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+<script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+<style> .ans { display: none; } #box { width:100px; height:100px; background:red; } </style>
+</head>
+<body>
+    <h3>FAQ (Click me)</h3>
+    <p class="ans">This is the answer.</p>
+
+    <button id="toggleBtn">Toggle Box</button>
+    <div id="box"></div>
+
+    <script>
+        $(document).ready(function(){
+            $("h3").click(function(){
+                $(".ans").slideToggle();
+            });
+
+            $("#toggleBtn").click(function(){
+                $("#box").fadeToggle();
+            });
+            
+            // Task 20 css
+            $("h3").css("color", "blue");
+        });
+    </script>
+</body>
+</html>
