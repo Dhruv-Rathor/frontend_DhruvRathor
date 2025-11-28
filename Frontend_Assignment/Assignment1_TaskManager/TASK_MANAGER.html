@@ -1,0 +1,113 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Task Manager</title>
+    <style>
+        body { font-family: sans-serif; padding: 20px; background-color: #f0f0f0; }
+        .container { max-width: 400px; margin: 0 auto; background: white; padding: 20px; border-radius: 8px; box-shadow: 0 0 10px rgba(0,0,0,0.1); }
+        input { padding: 10px; width: 65%; margin-right: 5px; }
+        button#addBtn { padding: 10px; width: 25%; background: green; color: white; border: none; cursor: pointer; }
+        .filters { margin: 15px 0; }
+        ul { list-style: none; padding: 0; }
+        li { background: #eee; padding: 10px; margin-bottom: 5px; display: flex; justify-content: space-between; align-items: center; }
+        li.completed span { text-decoration: line-through; color: gray; }
+        .btn-group button { margin-left: 5px; cursor: pointer; }
+        .del-btn { background: red; color: white; border: none; padding: 5px; }
+        .check-btn { background: orange; color: white; border: none; padding: 5px; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h2>My To-Do List</h2>
+    
+    <div>
+        <input type="text" id="taskInput" placeholder="New Task...">
+        <button id="addBtn" onclick="addTask()">Add</button>
+    </div>
+
+    <div class="filters">
+        <label>Filter: </label>
+        <select id="filter" onchange="renderTasks()">
+            <option value="all">All</option>
+            <option value="completed">Completed</option>
+            <option value="pending">Pending</option>
+        </select>
+    </div>
+
+    <ul id="taskList"></ul>
+</div>
+
+<script>
+    // 1. Load tasks from Local Storage on startup
+    // We store tasks as an array of objects: [{text: "Buy milk", completed: false}, ...]
+    let tasks = JSON.parse(localStorage.getItem('myTasks')) || [];
+
+    // Render the list immediately
+    renderTasks();
+
+    // 2. Function to Add Task
+    function addTask() {
+        let input = document.getElementById("taskInput");
+        let text = input.value;
+
+        if (text === "") {
+            alert("Please write a task!");
+            return;
+        }
+
+        // Add new object to array
+        tasks.push({ text: text, completed: false });
+        
+        // Save and Update UI
+        saveAndRender();
+        input.value = ""; // Clear input
+    }
+
+    // 3. Function to Delete Task
+    function deleteTask(index) {
+        tasks.splice(index, 1); // Remove 1 item at specific index
+        saveAndRender();
+    }
+
+    // 4. Function to Toggle Completed
+    function toggleTask(index) {
+        tasks[index].completed = !tasks[index].completed; // Flip true/false
+        saveAndRender();
+    }
+
+    // 5. Save to Storage and Refresh UI
+    function saveAndRender() {
+        localStorage.setItem('myTasks', JSON.stringify(tasks));
+        renderTasks();
+    }
+
+    // 6. Render the List (Display logic)
+    function renderTasks() {
+        let list = document.getElementById("taskList");
+        let filterValue = document.getElementById("filter").value;
+        list.innerHTML = ""; // Clear current list
+
+        tasks.forEach((task, index) => {
+            // Check Filter Logic
+            if (filterValue === "completed" && !task.completed) return;
+            if (filterValue === "pending" && task.completed) return;
+
+            // Create HTML
+            let li = document.createElement("li");
+            if(task.completed) li.classList.add("completed");
+
+            li.innerHTML = `
+                <span>${task.text}</span>
+                <div class="btn-group">
+                    <button class="check-btn" onclick="toggleTask(${index})">✔</button>
+                    <button class="del-btn" onclick="deleteTask(${index})">X</button>
+                </div>
+            `;
+            list.appendChild(li);
+        });
+    }
+</script>
+</body>
+</html>

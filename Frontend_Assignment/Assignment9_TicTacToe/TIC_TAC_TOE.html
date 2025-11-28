@@ -1,0 +1,139 @@
+﻿<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Simple Tic Tac Toe</title>
+    <style>
+        body { font-family: sans-serif; text-align: center; background-color: #222; color: white; }
+        h1 { margin-top: 20px; }
+        
+        .board { 
+            display: grid; 
+            grid-template-columns: repeat(3, 100px); 
+            gap: 5px; 
+            justify-content: center; 
+            margin: 20px auto; 
+        }
+        
+        .cell {
+            width: 100px; 
+            height: 100px; 
+            background: #444; 
+            display: flex; 
+            justify-content: center; 
+            align-items: center; 
+            font-size: 3rem; 
+            cursor: pointer; 
+            font-weight: bold;
+        }
+        .cell:hover { background: #555; }
+        
+        /* Colors for X and O */
+        .x-style { color: #ff6b6b; }
+        .o-style { color: #4ecdc4; }
+
+        #status { font-size: 1.5rem; margin-bottom: 20px; }
+        button { padding: 10px 20px; font-size: 1rem; cursor: pointer; background: #f1c40f; border: none; }
+    </style>
+</head>
+<body>
+
+    <h1>Tic Tac Toe</h1>
+    <div id="status">Player X's Turn</div>
+
+    <div class="board">
+        <div class="cell" onclick="handleClick(0)"></div>
+        <div class="cell" onclick="handleClick(1)"></div>
+        <div class="cell" onclick="handleClick(2)"></div>
+        <div class="cell" onclick="handleClick(3)"></div>
+        <div class="cell" onclick="handleClick(4)"></div>
+        <div class="cell" onclick="handleClick(5)"></div>
+        <div class="cell" onclick="handleClick(6)"></div>
+        <div class="cell" onclick="handleClick(7)"></div>
+        <div class="cell" onclick="handleClick(8)"></div>
+    </div>
+
+    <button onclick="restartGame()">Restart Game</button>
+
+<script>
+    // 1. Variables
+    let board = ["", "", "", "", "", "", "", "", ""]; // Stores X or O
+    let currentPlayer = "X";
+    let gameActive = true;
+
+    // 2. Winning Combinations (Indices)
+    const winningConditions = [
+        [0, 1, 2], [3, 4, 5], [6, 7, 8], // Rows
+        [0, 3, 6], [1, 4, 7], [2, 5, 8], // Columns
+        [0, 4, 8], [2, 4, 6]             // Diagonals
+    ];
+
+    // 3. Function when a cell is clicked
+    function handleClick(index) {
+        // Stop if cell is taken or game is over
+        if (board[index] !== "" || !gameActive) return;
+
+        // Update Data
+        board[index] = currentPlayer;
+        
+        // Update UI (The boxes)
+        let cell = document.getElementsByClassName("cell")[index];
+        cell.innerText = currentPlayer;
+        
+        // Add color class
+        if (currentPlayer === "X") cell.classList.add("x-style");
+        else cell.classList.add("o-style");
+
+        // Check if someone won
+        checkResult();
+    }
+
+    // 4. Check for Win or Draw
+    function checkResult() {
+        let roundWon = false;
+
+        for (let i = 0; i < winningConditions.length; i++) {
+            let [a, b, c] = winningConditions[i]; // Get indices
+            
+            // Check if all three match
+            if (board[a] !== "" && board[a] === board[b] && board[b] === board[c]) {
+                roundWon = true;
+                break;
+            }
+        }
+
+        if (roundWon) {
+            document.getElementById("status").innerText = `Player ${currentPlayer} Wins!`;
+            gameActive = false;
+            return;
+        }
+
+        // Check Draw (No empty strings left)
+        if (!board.includes("")) {
+            document.getElementById("status").innerText = "It's a Draw!";
+            gameActive = false;
+            return;
+        }
+
+        // Switch Player
+        currentPlayer = currentPlayer === "X" ? "O" : "X";
+        document.getElementById("status").innerText = `Player ${currentPlayer}'s Turn`;
+    }
+
+    // 5. Restart Game
+    function restartGame() {
+        board = ["", "", "", "", "", "", "", "", ""];
+        gameActive = true;
+        currentPlayer = "X";
+        document.getElementById("status").innerText = "Player X's Turn";
+        
+        // Clear UI
+        let cells = document.getElementsByClassName("cell");
+        for (let i = 0; i < cells.length; i++) {
+            cells[i].innerText = "";
+            cells[i].classList.remove("x-style", "o-style");
+        }
+    }
+</script>
+</body>
+</html>
